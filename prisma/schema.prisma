@@ -1,0 +1,882 @@
+// GreenLoop — Waste Management Platform
+// Complete Prisma Schema (CW1-CW8)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============= COMPANY & USERS =============
+
+model Company {
+  id                    String   @id @default(cuid())
+  name                  String
+  registrationNumber    String?
+  vatNumber             String?
+  cisUTR                String?
+  wasteCarrierLicence   String
+  licenceExpiryDate     DateTime?
+  eaPermitNumber        String?
+  address               String
+  postcode              String
+  phone                 String
+  email                 String
+  logo                  String?
+  subscriptionPlan      String   @default("STARTER")
+  subscriptionStatus    String   @default("TRIAL")
+  trialEndsAt           DateTime?
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  users                 User[]
+  jobs                  Job[]
+  customers             Customer[]
+  vehicles              Vehicle[]
+  invoices              Invoice[]
+  wtns                  WTN[]
+  wasteStreams          WasteStream[]
+  certificates          ComplianceCertificate[]
+  routes                Route[]
+  recurringJobs         RecurringJob[]
+  skips                 Skip[]
+  contracts             Contract[]
+  weighbridgeTickets    WeighbridgeTicket[]
+  hazardousConsignments HazardousConsignment[]
+  eprSubmissions        EPRSubmission[]
+  packagingRecords      PackagingRecord[]
+}
+
+model User {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name          String
+  email         String   @unique
+  passwordHash  String?
+  role          String
+  phone         String?
+  avatar        String?
+  
+  cscsNumber    String?
+  cscsExpiry    DateTime?
+  driverLicence String?
+  driverCPCExpiry DateTime?
+  
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  assignedJobs  Job[]    @relation("AssignedDriver")
+  assignedRoutes Route[] @relation("RouteDriver")
+  timesheets    Timesheet[]
+  managedCustomers Customer[]
+  weighbridgeTickets WeighbridgeTicket[] @relation("WeighbridgeOperator")
+}
+
+// ============= JOBS =============
+
+model Job {
+  id                String      @id @default(cuid())
+  companyId         String
+  company           Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  reference         String      @unique
+  
+  customerId        String
+  customer          Customer    @relation(fields: [customerId], references: [id])
+  customerSiteId    String?
+  customerSite      CustomerSite? @relation(fields: [customerSiteId], references: [id])
+  
+  siteAddress       String
+  sitePostcode      String
+  lat               Float?
+  lng               Float?
+  
+  jobType           String
+  status            String      @default("SCHEDULED")
+  
+  scheduledDate     DateTime
+  scheduledTime     String?
+  completedDate     DateTime?
+  
+  driverId          String?
+  driver            User?       @relation("AssignedDriver", fields: [driverId], references: [id])
+  vehicleId         String?
+  vehicle           Vehicle?    @relation(fields: [vehicleId], references: [id])
+  
+  wasteStreamId     String?
+  wasteStream       WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  containerType     String?
+  containerQuantity Int?
+  tonnage           Float?
+  photos            String?
+  
+  routeId           String?
+  route             Route?      @relation(fields: [routeId], references: [id])
+  sequenceInRoute   Int?
+  
+  isRecurring       Boolean     @default(false)
+  recurringJobId    String?
+  recurringJob      RecurringJob? @relation(fields: [recurringJobId], references: [id])
+  
+  estimatedDuration Int?
+  actualStartTime   DateTime?
+  actualEndTime     DateTime?
+  
+  skipId            String?
+  skip              Skip?       @relation(fields: [skipId], references: [id])
+  
+  customerNotified  Boolean     @default(false)
+  customerNotifiedAt DateTime?
+  
+  hasException      Boolean     @default(false)
+  exceptionReason   String?
+  exceptionNotes    String?
+  
+  notes             String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  wtn               WTN?
+  invoiceLineItems  InvoiceLineItem[]
+  weighbridgeTickets WeighbridgeTicket[]
+}
+
+model RecurringJob {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id])
+  
+  siteAddress   String
+  sitePostcode  String
+  
+  jobType       String
+  wasteStreamId String
+  wasteStream   WasteStream @relation(fields: [wasteStreamId], references: [id])
+  containerType String
+  containerQuantity Int
+  
+  frequency     String
+  dayOfWeek     Int?
+  dayOfMonth    Int?
+  interval      Int      @default(1)
+  
+  preferredTime String?
+  
+  startDate     DateTime
+  endDate       DateTime?
+  isActive      Boolean  @default(true)
+  
+  generateDaysInAdvance Int @default(7)
+  
+  createdAt     DateTime @default(now())
+  jobs          Job[]
+}
+
+// ============= ROUTES =============
+
+model Route {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  reference     String   @unique
+  
+  name          String
+  date          DateTime
+  
+  driverId      String?
+  driver        User?    @relation("RouteDriver", fields: [driverId], references: [id])
+  vehicleId     String?
+  vehicle       Vehicle? @relation(fields: [vehicleId], references: [id])
+  
+  status        String   @default("PLANNED")
+  
+  estimatedDistance Float?
+  estimatedDuration Int?
+  actualDistance    Float?
+  actualDuration    Int?
+  
+  optimisedAt   DateTime?
+  optimisationMethod String?
+  
+  startLat      Float?
+  startLng      Float?
+  endLat        Float?
+  endLng        Float?
+  
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  jobs          Job[]
+}
+
+// ============= SKIPS =============
+
+model Skip {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  assetNumber   String   @unique
+  size          String
+  type          String
+  
+  status        String   @default("DEPOT")
+  
+  currentCustomerId String?
+  currentCustomer   Customer? @relation(fields: [currentCustomerId], references: [id])
+  currentLocation   String?
+  currentLat        Float?
+  currentLng        Float?
+  
+  hireStartDate DateTime?
+  hireEndDate   DateTime?
+  
+  condition     String?
+  lastMaintenance DateTime?
+  
+  rfidTag       String?
+  gpsTrackerEnabled Boolean @default(false)
+  
+  purchaseDate  DateTime?
+  purchaseCost  Float?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  jobs          Job[]
+}
+
+// ============= CUSTOMERS =============
+
+model Customer {
+  id                String   @id @default(cuid())
+  companyId         String
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name              String
+  contactName       String?
+  email             String?
+  phone             String?
+  
+  companyNumber     String?
+  vatNumber         String?
+  sicCode           String?
+  website           String?
+  
+  billingAddress    String?
+  billingPostcode   String?
+  billingEmail      String?
+  
+  paymentTerms      Int      @default(30)
+  creditLimit       Float?
+  currentBalance    Float    @default(0)
+  
+  accountManagerId  String?
+  accountManager    User?    @relation(fields: [accountManagerId], references: [id])
+  customerType      String?
+  industry          String?
+  
+  source            String?
+  referredBy        String?
+  
+  isActive          Boolean  @default(true)
+  rating            Int?     @default(5)
+  
+  dutyOfCareReceived  Boolean  @default(false)
+  wasteContractSigned Boolean  @default(false)
+  wasteContractDate   DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  sites             CustomerSite[]
+  jobs              Job[]
+  invoices          Invoice[]
+  wtns              WTN[]
+  recurringJobs     RecurringJob[]
+  skips             Skip[]
+  contracts         Contract[]
+  priceOverrides    PriceOverride[]
+  weighbridgeTickets WeighbridgeTicket[]
+}
+
+model CustomerSite {
+  id          String   @id @default(cuid())
+  customerId  String
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  name        String
+  address     String
+  postcode    String
+  lat         Float?
+  lng         Float?
+  contactName String?
+  contactPhone String?
+  accessNotes String?
+  createdAt   DateTime @default(now())
+  
+  jobs        Job[]
+}
+
+// ============= CONTRACTS & PRICING =============
+
+model Contract {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  reference     String   @unique
+  name          String
+  
+  startDate     DateTime
+  endDate       DateTime?
+  minimumTerm   Int?
+  noticePeriod  Int?
+  autoRenew     Boolean  @default(false)
+  
+  serviceType   String
+  wasteStreamId String?
+  wasteStream   WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  containerType String?
+  containerQuantity Int?
+  
+  frequency     String?
+  
+  pricing       String
+  pricePerLift  Float?
+  pricePerTonne Float?
+  monthlyFee    Float?
+  
+  terms         String?
+  
+  signedDate    DateTime?
+  signedBy      String?
+  documentUrl   String?
+  
+  status        String   @default("ACTIVE")
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model PriceOverride {
+  id            String   @id @default(cuid())
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  
+  wasteStreamId String?
+  wasteStream   WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  jobType       String?
+  containerType String?
+  
+  pricePerLift  Float?
+  pricePerTonne Float?
+  
+  validFrom     DateTime
+  validUntil    DateTime?
+  
+  createdAt     DateTime @default(now())
+}
+
+// ============= VEHICLES =============
+
+model Vehicle {
+  id                String   @id @default(cuid())
+  companyId         String
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  registration      String   @unique
+  type              String
+  make              String?
+  model             String?
+  year              Int?
+  vin               String?
+  
+  capacity          Float?
+  capacityUnit      String?
+  fuelType          String?
+  emissionsStandard String?
+  
+  oLicenceNumber    String?
+  oLicenceAuthority String?
+  oLicenceExpiry    DateTime?
+  
+  motExpiry         DateTime?
+  taxExpiry         DateTime?
+  insuranceExpiry   DateTime?
+  tachoCalibration  DateTime?
+  lolerExpiry       DateTime?
+  
+  lastServiceDate   DateTime?
+  lastServiceMiles  Int?
+  nextServiceDate   DateTime?
+  nextServiceMiles  Int?
+  currentMileage    Int?
+  
+  gpsEnabled        Boolean  @default(false)
+  gpsDeviceId       String?
+  lastGPSUpdate     DateTime?
+  currentLat        Float?
+  currentLng        Float?
+  
+  purchaseDate      DateTime?
+  purchasePrice     Float?
+  currentValue      Float?
+  isFinanced        Boolean  @default(false)
+  financeProvider   String?
+  monthlyPayment    Float?
+  
+  status            String   @default("ACTIVE")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  jobs              Job[]
+  routes            Route[]
+  maintenanceLogs   MaintenanceLog[]
+  defectReports     DefectReport[]
+  dailyChecks       DailyVehicleCheck[]
+}
+
+model MaintenanceLog {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  date          DateTime
+  mileage       Int?
+  type          String
+  description   String
+  cost          Float?
+  supplier      String?
+  invoiceNumber String?
+  
+  nextServiceMiles Int?
+  nextServiceDate  DateTime?
+  
+  performedBy   String?
+  createdAt     DateTime @default(now())
+}
+
+model DefectReport {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  reportedDate  DateTime @default(now())
+  reportedBy    String
+  
+  severity      String
+  category      String
+  description   String
+  photos        String?
+  
+  status        String   @default("REPORTED")
+  
+  resolvedDate  DateTime?
+  resolvedBy    String?
+  resolutionNotes String?
+  cost          Float?
+  
+  createdAt     DateTime @default(now())
+}
+
+model DailyVehicleCheck {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  
+  checkDate     DateTime
+  checkedBy     String
+  
+  mileageReading Int?
+  
+  tyres         String
+  lights        String
+  brakes        String
+  fluidLevels   String
+  mirrors       String
+  horn          String
+  bodywork      String
+  
+  defectsFound  Boolean  @default(false)
+  defectNotes   String?
+  
+  signatureUrl  String?
+  
+  createdAt     DateTime @default(now())
+}
+
+model Timesheet {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  weekEnding    DateTime
+  
+  monday        Float?
+  tuesday       Float?
+  wednesday     Float?
+  thursday      Float?
+  friday        Float?
+  saturday      Float?
+  sunday        Float?
+  
+  totalHours    Float?
+  overtimeHours Float?
+  
+  status        String   @default("DRAFT")
+  
+  submittedAt   DateTime?
+  approvedAt    DateTime?
+  approvedBy    String?
+  
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+// ============= WASTE STREAMS =============
+
+model WasteStream {
+  id          String @id @default(cuid())
+  companyId   String
+  company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  ewcCode     String
+  description String
+  category    String
+  isHazardous Boolean @default(false)
+  createdAt   DateTime @default(now())
+  
+  jobs        Job[]
+  wtns        WTN[]
+  recurringJobs RecurringJob[]
+  contracts   Contract[]
+  priceOverrides PriceOverride[]
+  weighbridgeTickets WeighbridgeTicket[]
+  packagingRecords PackagingRecord[]
+}
+
+// ============= WTNS =============
+
+model WTN {
+  id                  String   @id @default(cuid())
+  companyId           String
+  company             Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  reference           String   @unique
+  
+  customerId          String
+  customer            Customer @relation(fields: [customerId], references: [id])
+  
+  jobId               String   @unique
+  job                 Job      @relation(fields: [jobId], references: [id])
+  
+  wasteStreamId       String?
+  wasteStream         WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  
+  producerName        String
+  producerAddress     String
+  producerPostcode    String
+  producerContactName String?
+  producerContactEmail String?
+  producerSICCode     String?
+  
+  carrierName         String
+  carrierAddress      String
+  carrierLicence      String
+  carrierContactName  String
+  carrierContactEmail String
+  
+  receiverName        String?
+  receiverAddress     String?
+  receiverPermit      String?
+  receiverEWCCode     String?
+  
+  ewcCode             String
+  wasteDescription    String
+  quantity            Float?
+  quantityUnit        String?
+  containerType       String?
+  numberOfContainers  Int?
+  
+  producerSignature   String?
+  producerSignedAt    DateTime?
+  producerSignedBy    String?
+  
+  carrierSignature    String?
+  carrierSignedAt     DateTime?
+  carrierSignedBy     String?
+  
+  receiverSignature   String?
+  receiverSignedAt    DateTime?
+  
+  collectionDate      DateTime
+  transferDate        DateTime?
+  
+  photos              String?
+  gpsLatitude         Float?
+  gpsLongitude        Float?
+  
+  submittedToEA       Boolean  @default(false)
+  eaSubmissionId      String?
+  eaSubmittedAt       DateTime?
+  eaStatus            String?
+  eaErrorMessage      String?
+  
+  pdfUrl              String?
+  customerNotified    Boolean  @default(false)
+  customerNotifiedAt  DateTime?
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+// ============= HAZARDOUS WASTE =============
+
+model HazardousConsignment {
+  id                  String   @id @default(cuid())
+  companyId           String
+  company             Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  reference           String   @unique
+  
+  consignorName       String
+  consignorAddress    String
+  consignorPostcode   String
+  consignorPermit     String?
+  consignorContactName String?
+  consignorContactEmail String?
+  
+  ewcCode             String
+  wasteDescription    String
+  processCode         String
+  unNumber            String?
+  classCode           String?
+  packGroup           String?
+  
+  quantity            Float
+  quantityUnit        String
+  packagingType       String
+  numberOfPackages    Int?
+  
+  carrierName         String
+  carrierLicence      String
+  carrierContactName  String
+  carrierContactEmail String
+  vehicleReg          String
+  collectionDate      DateTime
+  
+  consigneeName       String
+  consigneeAddress    String
+  consigneePostcode   String
+  consigneePermit     String
+  consigneeContactName String?
+  consigneeContactEmail String?
+  receivedDate        DateTime?
+  
+  preNotificationSent Boolean  @default(false)
+  preNotifiedAt       DateTime?
+  eaReferenceNumber   String?
+  eaStatus            String?
+  
+  specialHandling     String?
+  emergencyContact    String?
+  
+  status              String   @default("PENDING")
+  
+  pdfUrl              String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+// ============= INVOICING =============
+
+model Invoice {
+  id                String   @id @default(cuid())
+  companyId         String
+  company           Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customerId        String
+  customer          Customer @relation(fields: [customerId], references: [id])
+  
+  reference         String   @unique
+  invoiceDate       DateTime @default(now())
+  dueDate           DateTime
+  
+  subtotal          Float
+  vatRate           Float    @default(20)
+  vatAmount         Float
+  vatReverseCharge  Boolean  @default(false)
+  cisDeduction      Float?
+  total             Float
+  
+  status            String   @default("DRAFT")
+  paidDate          DateTime?
+  paymentMethod     String?
+  paymentReference  String?
+  
+  wtnAttached       Boolean  @default(false)
+  pdfUrl            String?
+  
+  notes             String?
+  terms             String?
+  
+  sentAt            DateTime?
+  viewedAt          DateTime?
+  reminderSentAt    DateTime?
+  
+  xeroInvoiceId     String?
+  sageInvoiceId     String?
+  syncedAt          DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  lineItems         InvoiceLineItem[]
+  weighbridgeTickets WeighbridgeTicket[]
+}
+
+model InvoiceLineItem {
+  id            String   @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  jobId         String?
+  job           Job?     @relation(fields: [jobId], references: [id])
+  
+  description   String
+  quantity      Float
+  unitPrice     Float
+  total         Float
+  
+  taxable       Boolean  @default(true)
+  
+  sortOrder     Int      @default(0)
+  
+  createdAt     DateTime @default(now())
+}
+
+// ============= COMPLIANCE =============
+
+model ComplianceCertificate {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type        String
+  reference   String?
+  issuer      String?
+  issuedDate  DateTime?
+  expiryDate  DateTime
+  documentUrl String?
+  alerts      Boolean  @default(true)
+  
+  alertSent30Days Boolean @default(false)
+  alertSent7Days  Boolean @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EPRSubmission {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  period        String
+  submittedAt   DateTime @default(now())
+  submittedBy   String
+  
+  totalTonnage  Float
+  totalFee      Float
+  
+  packUKSubmissionId String?
+  packUKStatus  String?
+  
+  reportPdfUrl  String?
+  createdAt     DateTime @default(now())
+}
+
+model PackagingRecord {
+  id            String   @id @default(cuid())
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  productName   String?
+  sku           String?
+  
+  material      String
+  weight        Float
+  recyclability String?
+  ramScore      Int?
+  
+  period        DateTime
+  quantity      Int
+  totalWeight   Float
+  
+  feePerTonne   Float?
+  totalFee      Float?
+  
+  wasteStreamId String?
+  wasteStream   WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  
+  createdAt     DateTime @default(now())
+}
+
+// ============= WEIGHBRIDGE =============
+
+model WeighbridgeTicket {
+  id              String   @id @default(cuid())
+  companyId       String
+  company         Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  reference       String   @unique
+  siteId          String?
+  
+  customerId      String?
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  vehicleReg      String
+  driverId        String?
+  driver          User?    @relation("WeighbridgeOperator", fields: [driverId], references: [id])
+  
+  weightIn        Float?
+  weightOut       Float?
+  netWeight       Float?
+  
+  wasteStreamId   String?
+  wasteStream     WasteStream? @relation(fields: [wasteStreamId], references: [id])
+  ewcCode         String?
+  materialGrade   String?
+  
+  timeIn          DateTime
+  timeOut         DateTime?
+  
+  direction       String
+  
+  isContaminated  Boolean  @default(false)
+  contaminationLevel String?
+  contaminationNotes String?
+  contaminationPhotos String?
+  
+  isRejected      Boolean  @default(false)
+  rejectionReason String?
+  
+  pricePerTonne   Float?
+  totalValue      Float?
+  
+  jobId           String?
+  job             Job?     @relation(fields: [jobId], references: [id])
+  invoiceId       String?
+  invoice         Invoice? @relation(fields: [invoiceId], references: [id])
+  
+  operatorId      String
+  
+  ticketPdfUrl    String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
