@@ -487,6 +487,24 @@ async function main() {
     })
   }
 
+  // Create maintenance logs for vehicles
+  console.log('Creating maintenance logs...')
+  for (let i = 0; i < 5; i++) {
+    const vehicle = vehicles[Math.floor(Math.random() * vehicles.length)]
+    await prisma.maintenanceLog.create({
+      data: {
+        vehicleId: vehicle.id,
+        date: new Date(now.getTime() - Math.floor(Math.random() * 180) * 24 * 60 * 60 * 1000),
+        mileage: vehicle.currentMileage ? vehicle.currentMileage - Math.floor(Math.random() * 10000) : Math.floor(Math.random() * 50000),
+        type: ['SERVICE', 'REPAIR', 'MOT', 'INSPECTION'][Math.floor(Math.random() * 4)],
+        description: ['Oil change and filter replacement', 'Brake pad replacement', 'Annual MOT inspection', 'Hydraulic system repair', 'Tyre replacement'][Math.floor(Math.random() * 5)],
+        cost: Math.random() * 800 + 200,
+        supplier: ['ABC Motors', 'London Truck Services', 'Fleet Maintenance Ltd'][Math.floor(Math.random() * 3)],
+        performedBy: 'Workshop Team',
+      },
+    })
+  }
+
   // Create compliance certificates
   console.log('Creating compliance certificates...')
   await prisma.complianceCertificate.create({
@@ -511,6 +529,91 @@ async function main() {
     },
   })
 
+  await prisma.complianceCertificate.create({
+    data: {
+      companyId: company.id,
+      type: 'ENVIRONMENTAL_PERMIT',
+      reference: 'EPR/AB1234CD/A001',
+      issuer: 'Environment Agency',
+      issuedDate: new Date('2023-03-15'),
+      expiryDate: new Date('2028-03-14'),
+    },
+  })
+
+  await prisma.complianceCertificate.create({
+    data: {
+      companyId: company.id,
+      type: 'WASTE_BROKER_REGISTRATION',
+      reference: 'CBDL999888',
+      issuer: 'Environment Agency',
+      issuedDate: new Date('2024-06-01'),
+      expiryDate: new Date('2027-05-31'),
+    },
+  })
+
+  // Create weighbridge tickets
+  console.log('Creating weighbridge tickets...')
+  for (let i = 0; i < 100; i++) {
+    const daysAgo = Math.floor(Math.random() * 60)
+    const timeIn = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000)
+    const timeOut = new Date(timeIn.getTime() + (Math.random() * 2 * 60 * 60 * 1000))
+    const customer = customers[Math.floor(Math.random() * customers.length)]
+    const wasteStream = wasteStreams[Math.floor(Math.random() * wasteStreams.length)]
+    
+    const weightIn = Math.random() * 15000 + 5000
+    const weightOut = weightIn + Math.random() * 8000 + 2000
+    const netWeight = weightOut - weightIn
+
+    await prisma.weighbridgeTicket.create({
+      data: {
+        companyId: company.id,
+        reference: `WB-2026-${String(i + 1).padStart(5, '0')}`,
+        customerId: customer.id,
+        vehicleReg: vehicles[Math.floor(Math.random() * vehicles.length)].registration,
+        wasteStreamId: wasteStream.id,
+        ewcCode: wasteStream.ewcCode,
+        weightIn,
+        weightOut,
+        netWeight,
+        timeIn,
+        timeOut,
+        direction: 'IN',
+        isContaminated: Math.random() > 0.9,
+        contaminationLevel: Math.random() > 0.9 ? ['LOW', 'MEDIUM', 'HIGH'][Math.floor(Math.random() * 3)] : null,
+        pricePerTonne: Math.random() * 100 + 50,
+        totalValue: (netWeight / 1000) * (Math.random() * 100 + 50),
+        operatorId: operator.id,
+      },
+    })
+  }
+
+  // Create routes
+  console.log('Creating routes...')
+  for (let i = 0; i < 20; i++) {
+    const daysAgo = Math.floor(Math.random() * 30)
+    const routeDate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000)
+    const vehicle = vehicles[Math.floor(Math.random() * vehicles.length)]
+    const driver = Math.random() > 0.5 ? driver1 : driver2
+
+    await prisma.route.create({
+      data: {
+        companyId: company.id,
+        reference: `ROUTE-2026-${String(i + 1).padStart(3, '0')}`,
+        name: `Route ${i + 1} - ${['North London', 'South Essex', 'Central', 'East End'][Math.floor(Math.random() * 4)]}`,
+        date: routeDate,
+        driverId: driver.id,
+        vehicleId: vehicle.id,
+        status: daysAgo > 1 ? 'COMPLETED' : 'PLANNED',
+        estimatedDistance: Math.random() * 50 + 20,
+        estimatedDuration: Math.floor(Math.random() * 300 + 180),
+        actualDistance: daysAgo > 1 ? Math.random() * 50 + 20 : null,
+        actualDuration: daysAgo > 1 ? Math.floor(Math.random() * 300 + 180) : null,
+        startLat: 51.5074,
+        startLng: -0.1278,
+      },
+    })
+  }
+
   console.log('✅ Seed complete!')
   console.log(`
   📊 Seed Summary:
@@ -518,11 +621,13 @@ async function main() {
   - Users: 5 (1 operator, 1 dispatcher, 2 drivers, 1 compliance officer)
   - Customers: 50
   - Waste Streams: 8
-  - Vehicles: 5
+  - Vehicles: 5 (with maintenance logs)
   - Jobs: 500
   - WTNs: 300
   - Invoices: 50
-  - Certificates: 2
+  - Certificates: 4
+  - Weighbridge Tickets: 100
+  - Routes: 20
 
   🔐 Login credentials:
   Email: sarah@greenloop-demo.co.uk
