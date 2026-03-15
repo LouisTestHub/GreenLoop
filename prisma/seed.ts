@@ -114,6 +114,42 @@ async function main() {
     },
   })
 
+  // Demo users for one-click login
+  const demoDriver = await prisma.user.create({
+    data: {
+      companyId: company.id,
+      name: 'Demo Driver',
+      email: 'driver@greenloop-demo.co.uk',
+      passwordHash,
+      role: 'DRIVER',
+      phone: '07700 900128',
+      driverLicence: 'DRIVER123456DD1AB',
+      driverCPCExpiry: new Date('2027-12-31'),
+    },
+  })
+
+  const demoWeighbridge = await prisma.user.create({
+    data: {
+      companyId: company.id,
+      name: 'Demo Weighbridge Operator',
+      email: 'weighbridge@greenloop-demo.co.uk',
+      passwordHash,
+      role: 'OPERATOR',
+      phone: '07700 900129',
+    },
+  })
+
+  const demoCustomer = await prisma.user.create({
+    data: {
+      companyId: company.id,
+      name: 'Demo Customer Portal User',
+      email: 'customer@greenloop-demo.co.uk',
+      passwordHash,
+      role: 'OPERATOR', // Customer portal users can view jobs/WTNs
+      phone: '07700 900130',
+    },
+  })
+
   // Create waste streams
   console.log('Creating waste streams...')
   const wasteStreams = await Promise.all([
@@ -618,7 +654,7 @@ async function main() {
   console.log(`
   📊 Seed Summary:
   - Company: 1 (${company.name})
-  - Users: 5 (1 operator, 1 dispatcher, 2 drivers, 1 compliance officer)
+  - Users: 8 (including 5 staff + 3 demo users for one-click login)
   - Customers: 50
   - Waste Streams: 8
   - Vehicles: 5 (with maintenance logs)
@@ -629,9 +665,11 @@ async function main() {
   - Weighbridge Tickets: 100
   - Routes: 20
 
-  🔐 Login credentials:
-  Email: sarah@greenloop-demo.co.uk
-  Password: password123
+  🔐 One-Click Demo Login Credentials:
+  Operations Manager: sarah@greenloop-demo.co.uk / password123
+  Driver: driver@greenloop-demo.co.uk / password123
+  Weighbridge: weighbridge@greenloop-demo.co.uk / password123
+  Customer: customer@greenloop-demo.co.uk / password123
   `)
 }
 

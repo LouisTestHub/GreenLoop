@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Loader2, Recycle, Shield, FileCheck, Truck, ArrowRight } from 'lucide-react'
+import { Loader2, Recycle, Shield, FileCheck, Truck, ArrowRight, User, UserCog, Scale, Navigation } from 'lucide-react'
 
 function EdocCountdown() {
   const [days, setDays] = useState(0)
@@ -111,6 +111,30 @@ export default function LoginPage() {
 
       if (result?.error) {
         setError('Invalid email or password')
+      } else {
+        router.push('/dashboard')
+        router.refresh()
+      }
+    } catch {
+      setError('An error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDemoLogin = async (demoEmail: string) => {
+    setError('')
+    setLoading(true)
+
+    try {
+      const result = await signIn('credentials', {
+        email: demoEmail,
+        password: 'password123',
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError('Demo login failed')
       } else {
         router.push('/dashboard')
         router.refresh()
@@ -249,9 +273,59 @@ export default function LoginPage() {
               </button>
             </form>
 
+            {/* One-Click Demo Login Buttons */}
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-white px-3 text-gray-500 font-medium uppercase tracking-wide">Quick Demo Login</span>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => handleDemoLogin('sarah@greenloop-demo.co.uk')}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 text-sm font-medium transition-colors disabled:opacity-50"
+                >
+                  <UserCog className="w-4 h-4" />
+                  <span>Ops Manager</span>
+                </button>
+
+                <button
+                  onClick={() => handleDemoLogin('driver@greenloop-demo.co.uk')}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 text-sm font-medium transition-colors disabled:opacity-50"
+                >
+                  <Navigation className="w-4 h-4" />
+                  <span>Driver</span>
+                </button>
+
+                <button
+                  onClick={() => handleDemoLogin('weighbridge@greenloop-demo.co.uk')}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 text-sm font-medium transition-colors disabled:opacity-50"
+                >
+                  <Scale className="w-4 h-4" />
+                  <span>Weighbridge</span>
+                </button>
+
+                <button
+                  onClick={() => handleDemoLogin('customer@greenloop-demo.co.uk')}
+                  disabled={loading}
+                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg text-green-700 text-sm font-medium transition-colors disabled:opacity-50"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Customer</span>
+                </button>
+              </div>
+            </div>
+
             {/* Demo credentials */}
-            <div className="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-100">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Demo Credentials</p>
+            <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Manual Login</p>
               <div className="space-y-1">
                 <p className="text-sm text-slate-700">
                   <span className="text-slate-400">Email:</span>{' '}
