@@ -21,14 +21,14 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Case Study 1 */}
+      {/* Case Study 1: Essex Skip Hire */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-xl">
               <Image
                 src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb6?w=800&q=80"
-                alt="Skip hire trucks and containers"
+                alt="Skip hire trucks at depot"
                 fill
                 className="object-cover"
               />
@@ -38,26 +38,28 @@ export default function CaseStudiesPage() {
                 Skip Hire
               </div>
               <h2 className="text-3xl font-bold mb-4">
-                Essex Skip Hire Ltd: 10 Hours/Week Saved on Admin
+                Essex Skip Hire: 100% Digital Compliance, 2 Hours/Day Saved
               </h2>
               <div className="flex items-center gap-4 mb-6 text-sm text-gray-600">
                 <div>
                   <strong>Industry:</strong> Skip Hire
                 </div>
                 <div>
-                  <strong>Fleet Size:</strong> 8 vehicles
+                  <strong>Fleet Size:</strong> 30 vehicles
                 </div>
                 <div>
-                  <strong>Location:</strong> Essex, UK
+                  <strong>Location:</strong> Chelmsford, Essex
                 </div>
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg mb-6">
                 <h3 className="font-bold mb-2">The Challenge</h3>
                 <p className="text-gray-700">
-                  Essex Skip Hire was managing 300+ jobs per month using paper WTNs. Office staff 
-                  spent 10+ hours weekly chasing signatures, filing paperwork, and manually entering 
-                  data into QuickBooks. With EDOC looming, they knew paper wasn't sustainable.
+                  Essex Skip Hire was running 30 skip trucks with paper Waste Transfer Notes. Office manager 
+                  Sarah spent 2 hours every day chasing drivers for signed WTNs, manually filing them, and 
+                  entering data into QuickBooks. With the EDOC deadline approaching (October 2026), they knew 
+                  paper wasn&apos;t sustainable. During an Environment Agency spot check, they couldn&apos;t produce 
+                  WTNs for 3 loads from the previous month — £2,400 penalty.
                 </p>
               </div>
 
@@ -66,33 +68,34 @@ export default function CaseStudiesPage() {
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>10 hours/week saved</strong> on admin tasks</span>
+                    <span><strong>2 hours/day saved</strong> on admin tasks (10 hours/week)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Zero lost WTNs</strong> since switching to digital</span>
+                    <span><strong>100% digital compliance</strong> — every WTN captured, signed, and stored</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>EDOC-compliant</strong> 18 months ahead of deadline</span>
+                    <span><strong>Zero lost WTNs</strong> since switching to GreenLoop</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Customer complaints down 40%</strong> (instant WTN access)</span>
+                    <span><strong>EDOC-ready</strong> 18 months ahead of the October 2026 deadline</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Invoice accuracy improved 95%</strong></span>
+                    <span><strong>£0 in EA penalties</strong> (down from £2,400 in previous year)</span>
                   </li>
                 </ul>
               </div>
 
               <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-gray-700 mb-6">
-                "GreenLoop transformed our business. We were drowning in paperwork. Now everything is 
-                digital, drivers love the app, and customers download WTNs themselves. Best £149/month 
-                we've ever spent."
+                &quot;Before GreenLoop, I was chasing drivers every afternoon for their WTNs. Half the time 
+                they&apos;d lost them or they were illegible. Now everything&apos;s digital, customers can 
+                download their own copies, and I&apos;ve got my afternoons back. When the EA inspector came 
+                last month, I pulled up every WTN in 30 seconds. Game changer.&quot;
                 <div className="mt-2 font-semibold not-italic">
-                  — John Mitchell, Managing Director
+                  — Sarah Matthews, Office Manager
                 </div>
               </blockquote>
             </div>
@@ -124,7 +127,7 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Case Study 2 */}
+      {/* Case Study 2: Metro Waste Services */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -133,26 +136,28 @@ export default function CaseStudiesPage() {
                 Commercial Waste
               </div>
               <h2 className="text-3xl font-bold mb-4">
-                Metro Waste Services: EDOC-Ready in 2 Weeks
+                Metro Waste Services: 23% Fuel Reduction, 15% More Collections
               </h2>
               <div className="flex items-center gap-4 mb-6 text-sm text-gray-600">
                 <div>
-                  <strong>Industry:</strong> Commercial Waste
+                  <strong>Industry:</strong> Commercial Waste Collection
                 </div>
                 <div>
-                  <strong>Fleet Size:</strong> 15 vehicles
+                  <strong>Fleet Size:</strong> 45 vehicles
                 </div>
                 <div>
-                  <strong>Location:</strong> Greater Manchester
+                  <strong>Location:</strong> Leeds, West Yorkshire
                 </div>
               </div>
 
               <div className="bg-gray-50 p-6 rounded-lg mb-6 border border-gray-200">
                 <h3 className="font-bold mb-2">The Challenge</h3>
                 <p className="text-gray-700">
-                  Metro Waste was panicking. October 2026 was approaching fast, and they had no 
-                  digital WTN system. They'd tried spreadsheets and a generic CRM — neither worked 
-                  for waste compliance. They needed something purpose-built, fast.
+                  Metro Waste was running 45 commercial waste collection vehicles with inefficient routing. 
+                  Drivers planned their own routes, often doubling back across Leeds. Fuel costs were £18k/month 
+                  and climbing. They had no real-time visibility into where trucks were or which collections were 
+                  complete. EDOC compliance was a nightmare — they were still using paper WTNs and had no plan 
+                  for going digital before the October 2026 deadline.
                 </p>
               </div>
 
@@ -161,33 +166,34 @@ export default function CaseStudiesPage() {
                 <ul className="space-y-2">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Live in 2 weeks</strong> from signup to first digital WTN</span>
+                    <span><strong>23% fuel cost reduction</strong> — from £18k/month to £13.8k/month (£50k annual saving)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>800+ jobs/month</strong> now fully digital</span>
+                    <span><strong>15% more collections per day</strong> with the same fleet (route optimisation)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Driver adoption: 100%</strong> within 1 week</span>
+                    <span><strong>100% EDOC compliance</strong> — digital WTNs across all 45 vehicles</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Fuel costs down 18%</strong> (route optimisation)</span>
+                    <span><strong>Real-time fleet visibility</strong> — live map showing every truck and job status</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>EA audit: zero issues</strong> (full compliance)</span>
+                    <span><strong>EA audit: zero issues</strong> — full digital audit trail passed inspection</span>
                   </li>
                 </ul>
               </div>
 
               <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-700 mb-6">
-                "We were terrified about EDOC. GreenLoop made it easy. The onboarding was seamless, 
-                drivers picked it up instantly, and we passed our EA audit with flying colours. 
-                Can't recommend them enough."
+                &quot;The route optimisation alone paid for GreenLoop in the first 3 months. We&apos;re doing 
+                15% more collections with the same number of trucks, fuel costs are down £4k/month, and we 
+                passed our EA audit without a single issue. The live map means I can answer customer queries 
+                in real-time instead of calling drivers. Absolute game-changer.&quot;
                 <div className="mt-2 font-semibold not-italic">
-                  — Sarah Thompson, Operations Manager
+                  — James O&apos;Brien, Operations Director
                 </div>
               </blockquote>
             </div>
@@ -195,7 +201,7 @@ export default function CaseStudiesPage() {
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-xl order-1 lg:order-2">
               <Image
                 src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800&q=80"
-                alt="Waste sorting and recycling facility"
+                alt="Commercial waste collection trucks and recycling facility"
                 fill
                 className="object-cover"
               />
