@@ -217,6 +217,7 @@ model Route {
   updatedAt     DateTime @updatedAt
   
   jobs          Job[]
+  stops         RouteStop[]
 }
 
 // ============= SKIPS =============
@@ -307,6 +308,7 @@ model Customer {
   contracts         Contract[]
   priceOverrides    PriceOverride[]
   weighbridgeTickets WeighbridgeTicket[]
+  portalUsers       PortalUser[]
 }
 
 model CustomerSite {
@@ -828,6 +830,121 @@ model PackagingRecord {
 }
 
 // ============= WEIGHBRIDGE =============
+
+// ============= PORTAL USERS =============
+
+model PortalUser {
+  id            String   @id @default(cuid())
+  customerId    String
+  customer      Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  name          String
+  email         String   @unique
+  passwordHash  String
+  phone         String?
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ============= ROUTE STOPS & DRIVER LOGS =============
+
+model RouteStop {
+  id            String   @id @default(cuid())
+  routeId       String
+  route         Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  sequence      Int
+  address       String
+  postcode      String
+  lat           Float?
+  lng           Float?
+  customerId    String?
+  customerName  String?
+  jobType       String?
+  estimatedTime Int?
+  actualArrival DateTime?
+  actualDepart  DateTime?
+  status        String   @default("PENDING")
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+model DriverLog {
+  id            String   @id @default(cuid())
+  driverId      String
+  routeId       String?
+  jobId         String?
+  action        String
+  lat           Float?
+  lng           Float?
+  photoUrl      String?
+  signatureUrl  String?
+  notes         String?
+  contamination Boolean  @default(false)
+  contaminationNotes String?
+  timestamp     DateTime @default(now())
+}
+
+// ============= EA SUBMISSIONS =============
+
+model EASubmission {
+  id              String   @id @default(cuid())
+  companyId       String
+  reference       String   @unique
+  submissionType  String
+  period          String
+  status          String   @default("DRAFT")
+  submittedAt     DateTime?
+  submittedBy     String?
+  responseId      String?
+  responseStatus  String?
+  responseMessage String?
+  totalRecords    Int      @default(0)
+  totalTonnage    Float    @default(0)
+  dataPayload     String?
+  errorLog        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ============= WEIGHBRIDGE READINGS =============
+
+model WeighbridgeReading {
+  id              String   @id @default(cuid())
+  companyId       String
+  weighbridgeId   String
+  vehicleReg      String
+  grossWeight     Float?
+  tareWeight      Float?
+  netWeight       Float?
+  unit            String   @default("kg")
+  direction       String
+  operatorId      String?
+  operatorName    String?
+  wtnId           String?
+  jobId           String?
+  isAutomatic     Boolean  @default(false)
+  rawData         String?
+  timestamp       DateTime @default(now())
+  createdAt       DateTime @default(now())
+}
+
+// ============= AUDIT LOG =============
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  companyId     String
+  userId        String?
+  userName      String?
+  action        String
+  entityType    String
+  entityId      String?
+  oldValue      String?
+  newValue      String?
+  ipAddress     String?
+  userAgent     String?
+  timestamp     DateTime @default(now())
+}
 
 model WeighbridgeTicket {
   id              String   @id @default(cuid())
