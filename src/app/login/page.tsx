@@ -284,41 +284,44 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="mt-4 space-y-3">
                 <button
                   onClick={() => handleDemoLogin('sarah@greenloop-demo.co.uk')}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 text-sm font-medium transition-colors disabled:opacity-50"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg text-blue-700 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <UserCog className="w-4 h-4" />
-                  <span>Ops Manager</span>
+                  <UserCog className="w-5 h-5" />
+                  <div className="text-left">
+                    <div className="font-semibold">👔 Operations Manager</div>
+                    <div className="text-xs text-blue-500">Full access — manage jobs, drivers, compliance</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 ml-auto" />
                 </button>
 
                 <button
                   onClick={() => handleDemoLogin('driver@greenloop-demo.co.uk')}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 text-sm font-medium transition-colors disabled:opacity-50"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg text-orange-700 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <Navigation className="w-4 h-4" />
-                  <span>Driver</span>
+                  <Navigation className="w-5 h-5" />
+                  <div className="text-left">
+                    <div className="font-semibold">🚛 Driver</div>
+                    <div className="text-xs text-orange-500">Mobile view — collections, signatures, GPS</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 ml-auto" />
                 </button>
 
                 <button
-                  onClick={() => handleDemoLogin('weighbridge@greenloop-demo.co.uk')}
+                  onClick={() => handleDemoLogin('compliance@greenloop-demo.co.uk')}
                   disabled={loading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 text-sm font-medium transition-colors disabled:opacity-50"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg text-purple-700 text-sm font-medium transition-colors disabled:opacity-50"
                 >
-                  <Scale className="w-4 h-4" />
-                  <span>Weighbridge</span>
-                </button>
-
-                <button
-                  onClick={() => handleDemoLogin('customer@greenloop-demo.co.uk')}
-                  disabled={loading}
-                  className="flex items-center justify-center gap-2 px-3 py-2.5 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg text-green-700 text-sm font-medium transition-colors disabled:opacity-50"
-                >
-                  <User className="w-4 h-4" />
-                  <span>Customer</span>
+                  <Scale className="w-5 h-5" />
+                  <div className="text-left">
+                    <div className="font-semibold">📊 Compliance Officer</div>
+                    <div className="text-xs text-purple-500">Compliance reports, EDOC status, EA submissions</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 ml-auto" />
                 </button>
               </div>
             </div>
