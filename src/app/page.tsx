@@ -10,6 +10,12 @@ import {
   ArrowRight,
   CheckCircle2,
   BadgeCheck,
+  Star,
+  Play,
+  Globe,
+  Scale,
+  Route,
+  Monitor,
 } from 'lucide-react'
 
 export default function HomePage() {
@@ -72,7 +78,6 @@ export default function HomePage() {
             </div>
             
             <div className="hidden lg:block">
-              {/* Hero illustration placeholder */}
               <div className="bg-white/10 rounded-lg p-8 backdrop-blur-sm">
                 <svg className="w-full h-auto" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="50" y="50" width="300" height="200" rx="10" fill="white" opacity="0.1"/>
@@ -81,6 +86,96 @@ export default function HomePage() {
                 </svg>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Stats Bar */}
+      <section className="bg-slate-800 py-6">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+            {[
+              { value: '100+', label: 'Waste Operators' },
+              { value: '500,000+', label: 'WTNs Processed' },
+              { value: 'EDOC Ready', label: 'Full Compliance' },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="text-2xl md:text-3xl font-bold text-emerald-400 tabular-nums">{stat.value}</div>
+                <div className="text-gray-400 text-sm mt-1">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Review Badges */}
+      <section className="py-10 bg-gray-50 border-b border-gray-100">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <p className="text-center text-sm text-gray-500 mb-6">Trusted by waste operators. Rated by the industry.</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            {[
+              { name: 'Capterra', rating: '4.8/5' },
+              { name: 'G2', rating: '4.8/5' },
+              { name: 'Software Advice', rating: '4.9/5' },
+              { name: 'GetApp', rating: '4.8/5' },
+            ].map((badge) => (
+              <div key={badge.name} className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-gray-900">{badge.rating}</span>
+                  <span className="text-xs text-gray-500 ml-1">on {badge.name}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Unlimited Messaging */}
+      <section className="py-16 bg-gradient-to-r from-emerald-600 to-emerald-700">
+        <div className="container mx-auto px-4 max-w-5xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">No Limits. No Surprises.</h2>
+          <p className="text-emerald-100 text-lg mb-8">Scale your operations without scaling your costs.</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: '📄', label: 'Unlimited WTNs' },
+              { icon: '🚛', label: 'Unlimited Drivers' },
+              { icon: '📍', label: 'Unlimited Sites' },
+            ].map((item) => (
+              <div key={item.label} className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <div className="text-xl font-bold text-white">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Video Demo Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl text-center">
+          <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-2">Product Demo</p>
+          <h2 className="text-3xl font-bold mb-4">See GreenLoop in 2 Minutes</h2>
+          <p className="text-gray-600 mb-8 max-w-xl mx-auto">Watch how UK waste operators manage WTNs, track drivers, and stay EDOC-compliant.</p>
+          <div className="relative aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-2xl group cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-emerald-900 flex items-center justify-center">
+              <div className="absolute inset-0 opacity-20">
+                <div className="grid grid-cols-3 gap-4 p-8 h-full">
+                  <div className="bg-white/10 rounded-lg" />
+                  <div className="bg-white/10 rounded-lg col-span-2" />
+                  <div className="bg-white/10 rounded-lg col-span-2" />
+                  <div className="bg-white/10 rounded-lg" />
+                </div>
+              </div>
+              <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform z-10">
+                <Play className="w-8 h-8 text-white ml-1" />
+              </div>
+            </div>
+            <div className="absolute bottom-4 left-4 bg-black/60 text-white text-xs px-3 py-1 rounded-full z-10">2:12</div>
           </div>
         </div>
       </section>
@@ -170,11 +265,106 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* New Features Showcase */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-16">
+            <span className="inline-block bg-emerald-100 text-emerald-800 text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
+              New Features
+            </span>
+            <h2 className="text-3xl font-bold">
+              Just Launched — Built for EDOC Compliance
+            </h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              New tools designed to get you EDOC-ready, streamline your operations, and give your customers a better experience.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Shield,
+                title: 'EDOC Compliance Suite',
+                desc: 'Full DEFRA EDOC integration. Auto-submit digital duty of care records, track waste movements end-to-end, and generate compliance reports for EA audits.',
+                badge: 'EDOC',
+              },
+              {
+                icon: Monitor,
+                title: 'Customer Portal',
+                desc: 'Branded self-service portal for your customers. Download WTNs, view job history, request collections, and access compliance documents 24/7.',
+                badge: 'Portal',
+              },
+              {
+                icon: Smartphone,
+                title: 'Driver App',
+                desc: 'Purpose-built mobile app for drivers. E-signatures, photo proof, GPS tracking, offline capability. No more paper rounds sheets.',
+                badge: 'Mobile',
+              },
+              {
+                icon: Route,
+                title: 'Route Optimisation',
+                desc: 'AI-powered route planning. Reduce fuel costs by 20%, fit more jobs per day, and minimise empty running with smart scheduling.',
+                badge: 'AI',
+              },
+              {
+                icon: Globe,
+                title: 'EA Integration',
+                desc: 'Direct integration with Environment Agency systems. Automated permit checks, waste carrier licence validation, and exemption monitoring.',
+                badge: 'Integration',
+              },
+              {
+                icon: Scale,
+                title: 'Weighbridge Integration',
+                desc: 'Connect your weighbridge directly to GreenLoop. Auto-capture weights, generate WTNs on exit, and eliminate manual data entry at the gate.',
+                badge: 'Hardware',
+              },
+            ].map((feature) => (
+              <div key={feature.title} className="flex gap-5 bg-white p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-all">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                    <feature.icon className="w-6 h-6 text-emerald-600" />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-bold text-lg">{feature.title}</h3>
+                    <span className="text-xs font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">{feature.badge}</span>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">{feature.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold">Up and Running in 3 Steps</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              { step: '1', title: 'Sign Up', desc: 'Create your free account in 2 minutes. No credit card needed. Import your customer and site data.', icon: '🚀' },
+              { step: '2', title: 'Set Up Your Operations', desc: 'Add your vehicles, drivers, waste streams, and sites. Configure your EDOC submission settings.', icon: '⚙️' },
+              { step: '3', title: 'Start Managing', desc: 'Create digital WTNs, track collections, optimise routes, and submit EDOC records — all from one platform.', icon: '📊' },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="w-16 h-16 rounded-full bg-emerald-500 text-white text-2xl font-bold flex items-center justify-center mx-auto mb-6">{item.step}</div>
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Social Proof Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Trusted by 300+ UK Waste Carriers</h2>
+            <h2 className="text-3xl font-bold mb-4">Trusted by UK Waste Operators</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -182,28 +372,48 @@ export default function HomePage() {
               {
                 quote: 'GreenLoop saved us 10 hours a week on admin. The EDOC integration is flawless.',
                 author: 'John Smith',
+                role: 'Operations Director',
                 company: 'Essex Skip Hire Ltd',
+                initials: 'JS',
+                result: '10 hours/week saved',
+                stars: 5,
               },
               {
                 quote: 'We were panicking about the Oct 2026 deadline. GreenLoop got us compliant in 2 weeks.',
                 author: 'Sarah Jones',
+                role: 'Compliance Manager',
                 company: 'Metro Waste Services',
+                initials: 'SJ',
+                result: 'EDOC ready in 2 weeks',
+                stars: 5,
               },
               {
-                quote: 'Best £149/month we\'ve ever spent. The driver app is a game-changer.',
+                quote: 'Best £149/month we\'ve ever spent. The driver app is a game-changer for our team.',
                 author: 'Dave Brown',
+                role: 'Managing Director',
                 company: 'London Commercial Waste',
+                initials: 'DB',
+                result: '20% fuel savings',
+                stars: 5,
               },
-            ].map((testimonial, idx) => (
-              <div key={idx} className="bg-white p-6 rounded-lg shadow-sm">
+            ].map((testimonial) => (
+              <div key={testimonial.author} className="bg-white p-6 rounded-lg shadow-sm">
                 <div className="flex mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
+                  {[...Array(testimonial.stars)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 <p className="text-gray-700 mb-4 italic">&quot;{testimonial.quote}&quot;</p>
-                <div className="font-semibold">{testimonial.author}</div>
-                <div className="text-sm text-gray-500">{testimonial.company}</div>
+                <div className="mb-4">
+                  <span className="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full">{testimonial.result}</span>
+                </div>
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                  <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-bold">{testimonial.initials}</div>
+                  <div>
+                    <div className="font-semibold">{testimonial.author}</div>
+                    <div className="text-sm text-gray-500">{testimonial.role}, {testimonial.company}</div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -262,17 +472,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Final CTA Section */}
       <section className="py-16 bg-emerald-500 text-white">
         <div className="container mx-auto px-4 text-center max-w-4xl">
           <h2 className="text-3xl font-bold mb-4">Ready to Get EDOC-Ready?</h2>
-          <p className="text-xl mb-8">Join 300+ waste carriers already using GreenLoop</p>
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 bg-white text-emerald-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Start Free Trial <ArrowRight className="w-5 h-5" />
-          </Link>
+          <p className="text-emerald-100 font-semibold mb-2">Start your free 14-day trial — no credit card required</p>
+          <p className="text-xl mb-8">Join 100+ waste operators already using GreenLoop</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/login"
+              className="inline-flex items-center justify-center gap-2 bg-white text-emerald-500 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Start Free Trial <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+            >
+              Book a Demo
+            </Link>
+          </div>
           <p className="mt-4 text-sm text-emerald-100">14-day free trial. No credit card required.</p>
         </div>
       </section>
