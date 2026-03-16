@@ -32,11 +32,14 @@ export function Navigation() {
             <Link href="/case-studies" className="text-slate-700 hover:text-emerald-500 transition-colors">
               Case Studies
             </Link>
+            <Link href="/opportunity" className="text-slate-700 hover:text-emerald-500 transition-colors">
+              Opportunity
+            </Link>
+            <Link href="/market" className="text-slate-700 hover:text-emerald-500 transition-colors">
+              Market Research
+            </Link>
             <Link href="/about" className="text-slate-700 hover:text-emerald-500 transition-colors">
               About
-            </Link>
-            <Link href="/contact" className="text-slate-700 hover:text-emerald-500 transition-colors">
-              Contact
             </Link>
             <Link
               href="/login"
@@ -70,11 +73,14 @@ export function Navigation() {
             <Link href="/case-studies" className="block py-2 text-slate-700 hover:text-emerald-500">
               Case Studies
             </Link>
+            <Link href="/opportunity" className="block py-2 text-slate-700 hover:text-emerald-500">
+              Opportunity
+            </Link>
+            <Link href="/market" className="block py-2 text-slate-700 hover:text-emerald-500">
+              Market Research
+            </Link>
             <Link href="/about" className="block py-2 text-slate-700 hover:text-emerald-500">
               About
-            </Link>
-            <Link href="/contact" className="block py-2 text-slate-700 hover:text-emerald-500">
-              Contact
             </Link>
             <Link
               href="/login"
