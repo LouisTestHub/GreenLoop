@@ -4,6 +4,51 @@ import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { ArrowRight, TrendingUp, Clock, CheckCircle2 } from 'lucide-react'
 
+const caseStudies = [
+  {
+    slug: 'essex-skip-hire',
+    company: 'Essex Skip Hire',
+    location: 'Chelmsford, Essex',
+    sector: 'Skip Hire',
+    tagColor: 'bg-emerald-100 text-emerald-700',
+    headline: 'EDOC compliant 18 months early, 2 hours/day saved, zero lost WTNs',
+    image: 'https://images.unsplash.com/photo-1611284446314-60a58ac0deb6?w=800&q=80',
+    stats: [
+      { value: '2 hrs/day', label: 'Saved' },
+      { value: '100%', label: 'Compliant' },
+      { value: '£0', label: 'EA penalties' },
+    ],
+  },
+  {
+    slug: 'cleansweep-waste',
+    company: 'CleanSweep Waste',
+    location: 'Manchester',
+    sector: 'Skip Hire & Waste Collection',
+    tagColor: 'bg-amber-100 text-amber-700',
+    headline: 'EDOC compliant 6 months early, £800/month fuel savings, zero compliance incidents',
+    image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&q=80',
+    stats: [
+      { value: '£800/mo', label: 'Fuel saved' },
+      { value: 'Zero', label: 'Incidents' },
+      { value: '+18%', label: 'Collections' },
+    ],
+  },
+  {
+    slug: 'ecorecycle-ltd',
+    company: 'EcoRecycle Ltd',
+    location: 'Bristol',
+    sector: 'MRF Operator',
+    tagColor: 'bg-blue-100 text-blue-700',
+    headline: 'Weighbridge automation saved 2 FTE, EA audit passed with zero findings',
+    image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80',
+    stats: [
+      { value: '2 FTE', label: 'Saved' },
+      { value: 'Auto', label: 'EA reports' },
+      { value: 'Passed', label: 'EA audit' },
+    ],
+  },
+]
+
 export default function CaseStudiesPage() {
   return (
     <div className="min-h-screen">
@@ -16,89 +61,53 @@ export default function CaseStudiesPage() {
             Real Results from Real Waste Operators
           </h1>
           <p className="text-xl text-gray-300 mb-8">
-            See how UK waste carriers are using GreenLoop to save time, cut costs, and stay compliant.
+            See how UK waste carriers are using GreenLoop to save time, cut costs, and stay EDOC compliant.
           </p>
         </div>
       </section>
 
-      {/* Case Study 1: Essex Skip Hire */}
+      {/* Case Study Cards */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-xl">
-              <Image
-                src="https://images.unsplash.com/photo-1611284446314-60a58ac0deb6?w=800&q=80"
-                alt="Skip hire trucks at depot"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <div className="inline-block bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                Skip Hire
-              </div>
-              <h2 className="text-3xl font-bold mb-4">
-                Essex Skip Hire: 100% Digital Compliance, 2 Hours/Day Saved
-              </h2>
-              <div className="flex items-center gap-4 mb-6 text-sm text-gray-600">
-                <div>
-                  <strong>Industry:</strong> Skip Hire
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {caseStudies.map((study) => (
+              <Link
+                key={study.slug}
+                href={`/case-studies/${study.slug}`}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-100"
+              >
+                <div className="relative aspect-video overflow-hidden">
+                  <Image
+                    src={study.image}
+                    alt={study.company}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <div className={`inline-block ${study.tagColor} px-3 py-1 rounded-full text-xs font-semibold mb-2`}>
+                      {study.sector}
+                    </div>
+                    <h2 className="text-xl font-bold">{study.company}</h2>
+                    <p className="text-sm text-gray-300">{study.location}</p>
+                  </div>
                 </div>
-                <div>
-                  <strong>Fleet Size:</strong> 30 vehicles
+                <div className="p-6">
+                  <p className="text-sm font-semibold text-gray-900 mb-4">&ldquo;{study.headline}&rdquo;</p>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    {study.stats.map((stat, i) => (
+                      <div key={i} className="text-center">
+                        <div className="text-lg font-bold text-emerald-600">{stat.value}</div>
+                        <div className="text-xs text-gray-500">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-emerald-600 font-medium text-sm group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Read full story <ArrowRight className="w-4 h-4" />
+                  </p>
                 </div>
-                <div>
-                  <strong>Location:</strong> Chelmsford, Essex
-                </div>
-              </div>
-
-              <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                <h3 className="font-bold mb-2">The Challenge</h3>
-                <p className="text-gray-700">
-                  Essex Skip Hire was running 30 skip trucks with paper Waste Transfer Notes. Office manager 
-                  Sarah spent 2 hours every day chasing drivers for signed WTNs, manually filing them, and 
-                  entering data into QuickBooks. With the EDOC deadline approaching (October 2026), they knew 
-                  paper wasn&apos;t sustainable. During an Environment Agency spot check, they couldn&apos;t produce 
-                  WTNs for 3 loads from the previous month — £2,400 penalty.
-                </p>
-              </div>
-
-              <div className="bg-emerald-50 p-6 rounded-lg mb-6">
-                <h3 className="font-bold mb-3">The Results</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>2 hours/day saved</strong> on admin tasks (10 hours/week)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>100% digital compliance</strong> — every WTN captured, signed, and stored</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Zero lost WTNs</strong> since switching to GreenLoop</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>EDOC-ready</strong> 18 months ahead of the October 2026 deadline</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>£0 in EA penalties</strong> (down from £2,400 in previous year)</span>
-                  </li>
-                </ul>
-              </div>
-
-              <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-gray-700 mb-6">
-                &quot;Before GreenLoop, I was chasing drivers every afternoon for their WTNs. Half the time 
-                they&apos;d lost them or they were illegible. Now everything&apos;s digital, customers can 
-                download their own copies, and I&apos;ve got my afternoons back. When the EA inspector came 
-                last month, I pulled up every WTN in 30 seconds. Game changer.&quot;
-                <div className="mt-2 font-semibold not-italic">
-                  — Sarah Matthews, Office Manager
-                </div>
-              </blockquote>
-            </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -127,91 +136,8 @@ export default function CaseStudiesPage() {
         </div>
       </section>
 
-      {/* Case Study 2: Metro Waste Services */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <div className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                Commercial Waste
-              </div>
-              <h2 className="text-3xl font-bold mb-4">
-                Metro Waste Services: 23% Fuel Reduction, 15% More Collections
-              </h2>
-              <div className="flex items-center gap-4 mb-6 text-sm text-gray-600">
-                <div>
-                  <strong>Industry:</strong> Commercial Waste Collection
-                </div>
-                <div>
-                  <strong>Fleet Size:</strong> 45 vehicles
-                </div>
-                <div>
-                  <strong>Location:</strong> Leeds, West Yorkshire
-                </div>
-              </div>
-
-              <div className="bg-gray-50 p-6 rounded-lg mb-6 border border-gray-200">
-                <h3 className="font-bold mb-2">The Challenge</h3>
-                <p className="text-gray-700">
-                  Metro Waste was running 45 commercial waste collection vehicles with inefficient routing. 
-                  Drivers planned their own routes, often doubling back across Leeds. Fuel costs were £18k/month 
-                  and climbing. They had no real-time visibility into where trucks were or which collections were 
-                  complete. EDOC compliance was a nightmare — they were still using paper WTNs and had no plan 
-                  for going digital before the October 2026 deadline.
-                </p>
-              </div>
-
-              <div className="bg-blue-50 p-6 rounded-lg mb-6">
-                <h3 className="font-bold mb-3">The Results</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>23% fuel cost reduction</strong> — from £18k/month to £13.8k/month (£50k annual saving)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>15% more collections per day</strong> with the same fleet (route optimisation)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>100% EDOC compliance</strong> — digital WTNs across all 45 vehicles</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>Real-time fleet visibility</strong> — live map showing every truck and job status</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                    <span><strong>EA audit: zero issues</strong> — full digital audit trail passed inspection</span>
-                  </li>
-                </ul>
-              </div>
-
-              <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-700 mb-6">
-                &quot;The route optimisation alone paid for GreenLoop in the first 3 months. We&apos;re doing 
-                15% more collections with the same number of trucks, fuel costs are down £4k/month, and we 
-                passed our EA audit without a single issue. The live map means I can answer customer queries 
-                in real-time instead of calling drivers. Absolute game-changer.&quot;
-                <div className="mt-2 font-semibold not-italic">
-                  — James O&apos;Brien, Operations Director
-                </div>
-              </blockquote>
-            </div>
-
-            <div className="relative aspect-[4/3] rounded-lg overflow-hidden shadow-xl order-1 lg:order-2">
-              <Image
-                src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800&q=80"
-                alt="Commercial waste collection trucks and recycling facility"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Key Outcomes Grid */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 max-w-6xl">
           <h2 className="text-3xl font-bold text-center mb-12">
             Common Outcomes We See
@@ -220,23 +146,17 @@ export default function CaseStudiesPage() {
             <div className="bg-emerald-50 p-6 rounded-lg text-center">
               <Clock className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
               <h3 className="font-bold mb-2">8-12 Hours/Week Saved</h3>
-              <p className="text-sm text-gray-700">
-                Less admin, fewer phone calls, no filing paperwork
-              </p>
+              <p className="text-sm text-gray-700">Less admin, fewer phone calls, no filing paperwork</p>
             </div>
             <div className="bg-blue-50 p-6 rounded-lg text-center">
               <TrendingUp className="w-12 h-12 text-blue-500 mx-auto mb-4" />
               <h3 className="font-bold mb-2">15-20% Fuel Savings</h3>
-              <p className="text-sm text-gray-700">
-                AI route optimisation cuts miles and empty runs
-              </p>
+              <p className="text-sm text-gray-700">AI route optimisation cuts miles and empty runs</p>
             </div>
             <div className="bg-purple-50 p-6 rounded-lg text-center">
               <CheckCircle2 className="w-12 h-12 text-purple-500 mx-auto mb-4" />
-              <h3 className="font-bold mb-2">100% Compliance</h3>
-              <p className="text-sm text-gray-700">
-                EDOC-ready, EA audit-proof, zero lost WTNs
-              </p>
+              <h3 className="font-bold mb-2">100% EDOC Compliance</h3>
+              <p className="text-sm text-gray-700">EDOC-ready, EA audit-proof, zero lost WTNs</p>
             </div>
           </div>
         </div>
